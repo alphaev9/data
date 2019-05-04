@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <context:component-scan base-package="com.alpha.data"/>
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:prefix="/WEB-INF/"
+          p:suffix=".jsp"/>
+
+    <bean class="org.springframework.jdbc.core.JdbcTemplate" p:dataSource-ref="dataSource"/>
+
+    <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" c:dataSource-ref="dataSource"/>
+
+    <context:property-placeholder location="classpath:db.properties"/>
+
+    <beans profile="test">
+        <jdbc:embedded-database id="dataSource" type="H2">
+            <jdbc:script location="classpath:schema.sql"></jdbc:script>
+            <jdbc:script location="classpath:data.sql"></jdbc:script>
+        </jdbc:embedded-database>
+    </beans>
+
+    <beans profile="dev">
+        <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+              p:driverClassName="${dev.driver}"
+              p:url="${dev.url}"
+              p:username="${dev.username}"
+              p:password="${dev.password}"/>
+        <jdbc:initialize-database data-source="dataSource">
+            <jdbc:script location="classpath:schema.sql"/>
+            <jdbc:script location="classpath:data.sql"/>
+        </jdbc:initialize-database>
+
+    </beans>
+    <beans profile="production">
+        <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource"
+              p:driverClassName="${production.driver}"
+              p:url="${production.url}"
+              p:username="${production.username}"
+              p:password="${production.password}"
+              init-method="init"
+              destroy-method="close"/>
+    </beans>
+</beans>
