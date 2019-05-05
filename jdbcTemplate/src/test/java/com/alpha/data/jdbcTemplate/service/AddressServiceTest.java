@@ -1,8 +1,7 @@
 package com.alpha.data.jdbcTemplate.service;
 
+import com.alpha.data.domain.Address;
 import com.alpha.data.jdbcTemplate.repository.AddressRepository;
-import com.alpha.springmvc.domain.Address;
-import com.alpha.springmvc.domain.Backlog;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

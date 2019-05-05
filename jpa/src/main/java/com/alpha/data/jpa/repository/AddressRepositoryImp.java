@@ -1,12 +1,15 @@
 package com.alpha.data.jpa.repository;
 
 import com.alpha.data.domain.Address;
+import com.alpha.data.domain.AddressEntity;
 import com.alpha.data.repository.AddressRepository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
 public class AddressRepositoryImp implements AddressRepository {
+    private EntityManager entityManager;
 
     @Override
     public List<Address> getAllAddresses() {
@@ -15,6 +18,7 @@ public class AddressRepositoryImp implements AddressRepository {
 
     @Override
     public Address getAddress(Long id) {
+        entityManager.find(AddressEntity.class,id);
         return null;
     }
 
@@ -61,5 +65,9 @@ public class AddressRepositoryImp implements AddressRepository {
     @Override
     public Long addAndReturnKey(Address address) {
         return null;
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 }
